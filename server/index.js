@@ -12,11 +12,13 @@ app.get("/", (req, res) => {
 
 app.post("/todo", async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, priority, due_date } = req.body;
+
     const newTodo = await pool.query(
-      "INSERT INTO todo (title) VALUES ($1) RETURNING *",
-      [title]
+      "INSERT INTO todo (title, priority, due_date) VALUES ($1, $2, $3) RETURNING *",
+      [title, priority || "medium", due_date || null]
     );
+
     res.json(newTodo.rows[0]);
   } catch (err) {
     console.error(err.message);

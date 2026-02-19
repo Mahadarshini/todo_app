@@ -9,5 +9,6 @@ const pool = new Pool({
     rejectUnauthorized: false,
   },
 });
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
 export default pool;

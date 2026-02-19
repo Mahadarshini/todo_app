@@ -5,11 +5,6 @@ import pool from "./db.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 app.get("/", (req, res) => {
   res.send("Server running");
@@ -43,10 +38,12 @@ app.put("/todo/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { completed } = req.body;
+
     await pool.query(
       "UPDATE todo SET completed = $1 WHERE id = $2",
       [completed, id]
     );
+
     res.json("Updated");
   } catch (err) {
     console.error(err.message);
@@ -56,13 +53,17 @@ app.put("/todo/:id", async (req, res) => {
 app.delete("/todo/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
     await pool.query("DELETE FROM todo WHERE id = $1", [id]);
+
     res.json("Deleted");
   } catch (err) {
     console.error(err.message);
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server started on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
